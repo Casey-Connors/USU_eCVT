@@ -49,19 +49,28 @@ double CalculatePeakPowerRPM(double throttlePosition){
 
 void ComputeMotorOutput(void){
   RPMSetpoint = CalculatePeakPowerRPM(GetThrottlePosition());          //Calculate peak power RPM based on current throttle
+  
   motorPID.Compute();                                                   //PID compute to determine required motor output
 }
 
 void Shift(void){
-  if(motorOutput > 0){                                                      //If the motor output is greater than 0, that means the eCVT needs to upshift
-        SetDirection(UPSHIFT);                                                    //Set the direction to upshift
-        digitalWrite(controlPin, abs(motorOutput));                               //Run the motor in the upshift direction at the speed computed by the PID system
-  }
-  else if(motorOutput < 0){                                                 //If the motor output is less than 0, that means the eCVT needs to downshift
-    SetDirection(DOWNSHIFT);                                                   //Set the direction to downshift
-    digitalWrite(controlPin, abs(motorOutput));                               //Run the motor in the downshift direction at the speed computed by the PID system
+  if(sheavePosition < SHEAVE_LIMIT_MAX && sheavePosition > SHEAVE_LIMIT_MIN){ //This makes sure the system does not try to move the sheave past its limits
+    if(motorOutput > 0){                                                      //If the motor output is greater than 0, that means the eCVT needs to upshift
+          DisableBrake();
+          SetDirection(UPSHIFT);                                                    //Set the direction to upshift
+          digitalWrite(controlPin, abs(motorOutput));                               //Run the motor in the upshift direction at the speed computed by the PID system
+    }
+    else if(motorOutput < 0){                                                 //If the motor output is less than 0, that means the eCVT needs to downshift
+      DisableBrake();
+      SetDirection(DOWNSHIFT);                                                   //Set the direction to downshift
+      digitalWrite(controlPin, abs(motorOutput));                               //Run the motor in the downshift direction at the speed computed by the PID system
+    }
+    else{
+      EnableBrake();
+    }
   }
   else{
+    motorOutput = 0;
     EnableBrake();
   }
 }
@@ -99,13 +108,14 @@ void Downshift(float distance, float rate){
 }
 
 /*************************************************************************************************************
-                                            Pin setup
+                                            Initialization
 *************************************************************************************************************/
 void InitializeController(void) {
   pinMode(controlPin, OUTPUT);          //controlPin is an output pin
   pinMode(directionPin, OUTPUT);        //directionPin is an output pin
   pinMode(brakePin, OUTPUT);            //brakePin is an output pin
   pinMode(tachPin, INPUT);              //tachPin is an input pin
+  pinMode(neutralPin, INPUT);
 
   motorPID.SetMode(AUTOMATIC);          //PID mode set to automatic. See documentation for PID library
   motorPID.SetOutputLimits(-MAX_SPEED, MAX_SPEED);   //Set output limits to be from - max speed to max speed. Later, if the pid outputs a negative value we interpret that as a different direction and change the motor accordingly

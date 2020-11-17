@@ -11,12 +11,15 @@
 #define MAX_THROTTLE 10           //Threshold that defines what is considered maximum throttle. Used in shifting algorithm.
 #define MIN_RPM 10                //Threshold for what is considered zero RPM
 #define RPM_GEAR_TEETH 1         //Number of teeth on the gear that the tachometer is measuring from.
+#define SHEAVE_LIMIT_MAX 20
+#define SHEAVE_LIMIT_MIN 0
 
 const int controlPin = 3;           //Controls the speed of the motor. Will be pwm control. Maybe map 0-255 to 0-100 for percentage of speed.
 const int directionPin = 4;         //on = downshift, off = upshift
 const int brakePin = 5;             //Brake is on when its connected to ground, off otherwise
 const int tachPin = 7;              //Pin that takes input from the hall effect sensor that is being used as a tachometer. This HAS to stay at pin 7 becuase its one of the few than can work for intterupts.
 const int throttlePositionPin = A0;  //Pin that takes input from the throttle position sensor
+const int neutralPin = 6;
 
 extern double kp;
 extern double ki;
@@ -26,6 +29,7 @@ extern const int pidSampleTime;
 extern double rpm;
 extern double motorOutput;
 extern double RPMSetpoint;
+double sheavePosition = 0;
 
 int GetThrottlePosition(void);
 
