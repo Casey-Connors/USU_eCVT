@@ -1,6 +1,7 @@
 #ifndef Hall_Effect_RPM_h
 #define Hall_Effect_RPM_h
 
+//I stole most of this code from somewhere on the internet. Don't @ me.
 class Hall_Effect_RPM{
 	public:
 		Hall_Effect_RPM(int pin);
