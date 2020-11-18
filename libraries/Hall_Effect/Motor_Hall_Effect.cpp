@@ -2,7 +2,6 @@
 #include <Arduino.h>
 
 //This whole dispatch thing is wierd but its the easiest way to be able to call the member function ISR's from attachInterrupt in the constructor
-extern Motor_Hall_Effect motor;
 
 void HallSensorU_Dispatch(){
     motor.HallSensorU();

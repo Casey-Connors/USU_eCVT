@@ -13,6 +13,8 @@ void HallSensorU_Dispatch();
 void HallSensorV_Dispatch();
 void HallSensorW_Dispatch();
 
+extern Motor_Hall_Effect motor;
+
 class Motor_Hall_Effect{
     public:
         Motor_Hall_Effect(void (*UISR)() , void (*VISR)() , void (*WISR)());
