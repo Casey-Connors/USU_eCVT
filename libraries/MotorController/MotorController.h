@@ -30,7 +30,7 @@ extern const int pidSampleTime;
 extern double rpm;
 extern double motorOutput;
 extern double RPMSetpoint;
-double sheavePosition = 0;
+extern float sheavePosition;
 
 int GetThrottlePosition(void);
 

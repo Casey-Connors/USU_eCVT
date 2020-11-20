@@ -2,6 +2,7 @@
 #include "../avr/cores/arduino/Arduino.h"
 #include <PID_v1.h>
 #include <Hall_Effect_RPM.h>
+#include "Motor_Hall_Effect.h"
 
 double kp = 1.2;
 double ki = 0.25;
@@ -11,6 +12,7 @@ const int pidSampleTime = 200;
 double rpm = 0;
 double motorOutput = 0;
 double RPMSetpoint = 0;
+float sheavePosition = 0;
 
 PID motorPID(&rpm, &motorOutput, &RPMSetpoint, kp, ki, kd, DIRECT);    //Set variables for PID system. See documentation for PID library
 Hall_Effect_RPM tach(7);
@@ -120,7 +122,10 @@ void InitializeController(void) {
   pinMode(brakePin, OUTPUT);            //brakePin is an output pin
   pinMode(tachPin, INPUT);              //tachPin is an input pin
   pinMode(neutralPin, INPUT);
-  pinMode(SAM_Hall_Pin, INPUT);
+  pinMode(Upin, INPUT);
+  pinMode(Vpin, INPUT);
+  pinMode(Wpin, INPUT);
+  sheavePosition = 0;
 
   motorPID.SetMode(AUTOMATIC);          //PID mode set to automatic. See documentation for PID library
   motorPID.SetOutputLimits(-MAX_SPEED, MAX_SPEED);   //Set output limits to be from - max speed to max speed. Later, if the pid outputs a negative value we interpret that as a different direction and change the motor accordingly

@@ -13,7 +13,6 @@ void HallSensorU_Dispatch();
 void HallSensorV_Dispatch();
 void HallSensorW_Dispatch();
 
-extern Motor_Hall_Effect motor;
 
 class Motor_Hall_Effect{
     public:
@@ -41,4 +40,6 @@ class Motor_Hall_Effect{
         float PPM;				    // Float variable to store calculated pulses per minute
         float RPM; 				    // Float variable to store calculated revolutions per minute
 };
+
+extern Motor_Hall_Effect motor;
 #endif  //Motor_Hall_Effect_h
