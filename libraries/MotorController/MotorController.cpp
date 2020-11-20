@@ -15,7 +15,7 @@ double RPMSetpoint = 0;
 float sheavePosition = 0;
 
 PID motorPID(&rpm, &motorOutput, &RPMSetpoint, kp, ki, kd, DIRECT);    //Set variables for PID system. See documentation for PID library
-Hall_Effect_RPM tach(7);
+Hall_Effect_RPM tach(tachPin);
 
 /*************************************************************************************************************
                                             Monitoring Functions
@@ -51,6 +51,7 @@ double CalculatePeakPowerRPM(double throttlePosition){
 
 void ComputeMotorOutput(void){
   RPMSetpoint = CalculatePeakPowerRPM(GetThrottlePosition());          //Calculate peak power RPM based on current throttle
+  tach.GetRPM();
   motorPID.Compute();                                                  //PID compute to determine required motor output
 
   if(sheavePosition >= SHEAVE_LIMIT_MAX){                              //If the sheave is at its max limit                           
@@ -132,5 +133,6 @@ void InitializeController(void) {
   motorPID.SetSampleTime(pidSampleTime);
   motorPID.SetControllerDirection(REVERSE);  //As motor output goes up, RPM goes down. This makes it a reverse process.
   
-  delay(1000);                                                    
+  delay(1000);
+  sheavePosition = 0;                                                    
 }

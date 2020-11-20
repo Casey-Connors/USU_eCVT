@@ -18,6 +18,9 @@ void setup() {
 
 void loop() {
   sheavePosition = motor.getPosition();
+  Serial.print("Sheave position: ");
+  Serial.println(sheavePosition);
+  
   //If the system is in drive (i.e. the neutral switch is in the ON or HIGH position)
   //Note that this currently relies on the transmission being in the netural position when the system turns on. This will need updated for the sheave limit sensor
   if(digitalRead(neutralPin)){

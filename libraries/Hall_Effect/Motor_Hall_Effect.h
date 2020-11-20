@@ -1,9 +1,9 @@
 #ifndef Motor_Hall_Effect_h
 #define Motor_Hall_Effect_h
 
-#define CW 1
-#define CCW -1
-#define PULSES_PER_MM 10
+#define CW -1
+#define CCW 1
+constexpr float PULSES_PER_MM = 100.00;
 
 const int Upin = 2;
 const int Vpin = 3;

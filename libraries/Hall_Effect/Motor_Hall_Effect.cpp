@@ -27,7 +27,8 @@ Motor_Hall_Effect::Motor_Hall_Effect(void (*UISR)() , void (*VISR)() , void (*WI
 }
 
 float Motor_Hall_Effect::getPosition(){
-    return (pulseCount * PULSES_PER_MM);
+    float position = pulseCount/PULSES_PER_MM;
+    return position;
 }
 
 int Motor_Hall_Effect::getDirection(){
