@@ -1,6 +1,7 @@
 #include "Motor_Hall_Effect.h"
 #include <Arduino.h>
 #include "MotorController.h"
+#include <pin_mapping.h>
 
 //This whole dispatch thing is wierd but its the easiest way to be able to call the member function ISR's from attachInterrupt in the constructor
 

@@ -5,10 +5,6 @@
 #define CCW 1
 constexpr float PULSES_PER_MM = 100.00;
 
-const int Upin = 2;
-const int Vpin = 3;
-const int Wpin = 4;
-
 void HallSensorU_Dispatch();
 void HallSensorV_Dispatch();
 void HallSensorW_Dispatch();

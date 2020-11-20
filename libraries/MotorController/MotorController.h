@@ -14,13 +14,6 @@
 #define SHEAVE_LIMIT_MAX 20         //Maximum distance (in mm) from home the sheave can travel (cant go further than this)
 #define SHEAVE_LIMIT_MIN 0          //Minimum distance (in mm) from home the sheave can travel (cant go closer than this)
 
-const int directionPin = 8;          //on = downshift, off = upshift
-const int brakePin = 5;              //Brake is on when its connected to ground, off otherwise
-const int tachPin = 7;               //Pin that takes input from the hall effect sensor that is being used as a tachometer. This HAS to stay at pin 7 becuase its one of the few than can work for intterupts.
-const int controlPin = 9;            //Controls the speed of the motor. Will be pwm control. Maybe map 0-255 to 0-100 for percentage of speed.
-const int throttlePositionPin = A0;  //Pin that takes input from the throttle position sensor
-const int neutralPin = 6;
-
 extern double kp;
 extern double ki;
 extern double kd;

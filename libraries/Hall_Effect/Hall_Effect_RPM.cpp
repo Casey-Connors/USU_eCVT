@@ -1,8 +1,7 @@
 #include <Arduino.h>
 #include "Hall_Effect_RPM.h"
 
-//Declaring these variables this way is not ideal but its necissary in order to impliment the ISR
-//The ISR MUST be defined outside the class. As such it needs access to some of the class variables so they have to be moved outside the class.
+//These can be defined in the class. Would have to do the extern and ISR wrapper trick like with the motor_hall_effect
 static volatile unsigned long LastTimeWeMeasured;                      // Stores the last time we measured a pulse so we can calculate the period.
 static volatile unsigned long PeriodBetweenPulses;  // Stores the period between pulses in microseconds.
 static unsigned int AmountOfReadings;

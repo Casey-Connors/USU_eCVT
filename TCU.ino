@@ -2,6 +2,7 @@
 #include <MotorController.h>
 #include <CommandLine.h>
 #include <Motor_Hall_Effect.h>
+#include <pin_mapping.h>
 
 char CommandLine[COMMAND_BUFFER_LENGTH + 1];
 float lastTime = 0;

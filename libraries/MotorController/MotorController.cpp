@@ -3,6 +3,7 @@
 #include <PID_v1.h>
 #include <Hall_Effect_RPM.h>
 #include "Motor_Hall_Effect.h"
+#include <pin_mapping.h>
 
 double kp = 1.2;
 double ki = 0.25;
