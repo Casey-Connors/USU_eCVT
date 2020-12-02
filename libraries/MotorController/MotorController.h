@@ -23,6 +23,10 @@ extern double rpm;
 extern double motorOutput;
 extern double RPMSetpoint;
 extern float sheavePosition;
+extern float motorRunTime;
+extern float motorStartTime;
+extern bool motorIsMoving;
+
 
 int GetThrottlePosition(void);
 

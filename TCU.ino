@@ -10,6 +10,8 @@ float currentTime = 0;
 float lastSpeed = 0;
 float currentSpeed = 0;
 float timeDelta = 0;
+float lastPosTime = 0;
+float posUpdateInterval = 3000;
 
 Motor_Hall_Effect motor = Motor_Hall_Effect(HallSensorU_Dispatch, HallSensorV_Dispatch, HallSensorW_Dispatch);
 
@@ -18,13 +20,24 @@ void setup() {
 }
 
 void loop() {
-  sheavePosition = motor.getPosition();
-  Serial.print("Sheave position: ");
-  Serial.println(sheavePosition);
+  Serial.print("U: ");
+  Serial.print(digitalRead(Upin));
+  Serial.print(" || V: ");
+  Serial.print(digitalRead(Vpin));
+  Serial.print(" || W: ");
+  Serial.println(digitalRead(Wpin));
+
+  
+  if(millis() - lastPosTime >= posUpdateInterval){
+    sheavePosition = motor.getPosition();
+    Serial.print("Sheave position: ");
+    Serial.println(sheavePosition);
+    lastPosTime = millis();
+  }
   
   //If the system is in drive (i.e. the neutral switch is in the ON or HIGH position)
   //Note that this currently relies on the transmission being in the netural position when the system turns on. This will need updated for the sheave limit sensor
-  if(digitalRead(neutralPin)){
+  if(/*digitalRead(neutralPin)*/0){
     currentSpeed = map(motorOutput, -MAX_SPEED, MAX_SPEED, -20, 20);
 
     if(currentSpeed != lastSpeed){
@@ -42,6 +55,13 @@ void loop() {
     bool received = getCommandLineFromSerialPort(CommandLine);         //gets a command from the command line if their is one (and returns true in that case)                
     if(received){                                                      //If there is a command stored in the command buffer (i.e. if there was a command in the command line).
       ExecuteCommand(CommandLine);                                        //Execute command. See CommandLine.cpp for implimentation 
+    }
+
+    if(motorIsMoving){
+      if(((millis()-motorStartTime)/1000) >= motorRunTime){              //This is my stupid way of checking if the motor has moved the desired amount without using delay()
+        EnableBrake();                                                    //Delay() kinda has problems when interrupts are constantly being called so this was the best I could come up with to
+        motorIsMoving = false;                                            //get around that problem because, unlike Rick Sanchez, I am a hack
+      }                                                                 
     }
   }
 }

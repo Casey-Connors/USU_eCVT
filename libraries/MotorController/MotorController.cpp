@@ -14,6 +14,9 @@ double rpm = 0;
 double motorOutput = 0;
 double RPMSetpoint = 0;
 float sheavePosition = 0;
+float motorRunTime = 0;
+float motorStartTime = 0;
+bool motorIsMoving = false;
 
 PID motorPID(&rpm, &motorOutput, &RPMSetpoint, kp, ki, kd, DIRECT);    //Set variables for PID system. See documentation for PID library
 Hall_Effect_RPM tach(tachPin);
@@ -84,7 +87,7 @@ void Shift(void){
 }
 
 void Upshift(float distance, float rate){         //distance is the distance in mm to move the sheave
-  float runTime = 3*distance/(MM_PER_REV);        //Computes the amount of time the motor has to run in order to move the sheave [distance] amount
+  motorRunTime = distance/(MM_PER_REV);        //Computes the amount of time the motor has to run in order to move the sheave [distance] amount
   rate = constrain(rate, MIN_SPEED, MAX_SPEED);
   
   Serial.print("The sheave upshift ");
@@ -95,13 +98,13 @@ void Upshift(float distance, float rate){         //distance is the distance in 
 
   DisableBrake();                                   //Disable the motor brake
   SetDirection(UPSHIFT);                           //Set the motor direction to backward
+  motorStartTime = millis();
   analogWrite(controlPin, rate);               //Set the motor
-  delay(runTime*1000);
-  EnableBrake();
+  motorIsMoving = true;
 }
 
 void Downshift(float distance, float rate){
-  float runTime = 3*distance/(MM_PER_REV);          //Computes the amount of time the motor has to run in order to move the sheave [distance] amount
+  motorRunTime = distance/(MM_PER_REV);          //Computes the amount of time the motor has to run in order to move the sheave [distance] amount
   rate = constrain(rate, MIN_SPEED, MAX_SPEED);
  
   Serial.print("The sheave will move ");
@@ -110,9 +113,9 @@ void Downshift(float distance, float rate){
 
   DisableBrake();                                   //Disable the motor brake
   SetDirection(DOWNSHIFT);                            //Set the motor direction to forward
-  analogWrite(controlPin, rate);              
-  delay(runTime * 1000);
-  EnableBrake();                                    //Enable the motor brake
+  motorStartTime = millis();
+  analogWrite(controlPin, rate);
+  motorIsMoving = true;              
 }
 
 /*************************************************************************************************************
