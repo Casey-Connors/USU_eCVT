@@ -4,16 +4,16 @@
 /*************************************************************************************************************
                                             Command line inputs
 *************************************************************************************************************/
-#define CR '\r'
-#define LF '\n'
-#define BS '\b'
-#define NULLCHAR '\0'
-#define SPACE ' '
+constexpr char CR = '\r';
+constexpr char LF = '\n';
+constexpr char BS = '\b';
+constexpr char NULLCHAR = '\0';
+constexpr char SPACE = ' ';
 #define COMMAND_BUFFER_LENGTH        25                        //length of serial buffer
 
 bool getCommandLineFromSerialPort(char * serialCommand);
 
-bool ExecuteCommand(char * exCommand);
+void ExecuteCommand(char * exCommand);
 
 int readInt(void);
 

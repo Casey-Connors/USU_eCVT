@@ -1,7 +1,7 @@
 #ifndef MotorController_h
 #define MotorController_h
 
-#include "../avr/cores/arduino/Arduino.h"
+#include <Arduino.h>
 
 #define MAX_SPEED 225               //This is the maximum pwm value that the motor should be set to.
 #define MIN_SPEED 0                 //This is the minimum pwm value that the motor should be set to. When at this value, the motor should not be running.

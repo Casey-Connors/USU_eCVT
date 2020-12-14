@@ -1,5 +1,5 @@
 #include "MotorController.h"
-#include "../avr/cores/arduino/Arduino.h"
+#include <Arduino.h>
 #include <PID_v1.h>
 #include <Hall_Effect_RPM.h>
 #include "Motor_Hall_Effect.h"
@@ -122,6 +122,7 @@ void Downshift(float distance, float rate){
                                             Initialization
 *************************************************************************************************************/
 void InitializeController(void) {
+  Serial.begin(9600);
   pinMode(controlPin, OUTPUT);          //controlPin is an output pin
   pinMode(directionPin, OUTPUT);        //directionPin is an output pin
   pinMode(brakePin, OUTPUT);            //brakePin is an output pin

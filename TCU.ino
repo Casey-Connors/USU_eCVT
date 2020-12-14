@@ -11,7 +11,7 @@ float lastSpeed = 0;
 float currentSpeed = 0;
 float timeDelta = 0;
 float lastPosTime = 0;
-float posUpdateInterval = 3000;
+float posUpdateInterval = 500;
 
 Motor_Hall_Effect motor = Motor_Hall_Effect(HallSensorU_Dispatch, HallSensorV_Dispatch, HallSensorW_Dispatch);
 
@@ -20,15 +20,16 @@ void setup() {
 }
 
 void loop() {
-  Serial.print("U: ");
-  Serial.print(digitalRead(Upin));
-  Serial.print(" || V: ");
-  Serial.print(digitalRead(Vpin));
-  Serial.print(" || W: ");
-  Serial.println(digitalRead(Wpin));
+  
 
   
   if(millis() - lastPosTime >= posUpdateInterval){
+    /*Serial.print("U: ");
+    Serial.print(digitalRead(Upin));
+    Serial.print(" || V: ");
+    Serial.print(digitalRead(Vpin));
+    Serial.print(" || W: ");
+    Serial.println(digitalRead(Wpin));*/
     sheavePosition = motor.getPosition();
     Serial.print("Sheave position: ");
     Serial.println(sheavePosition);

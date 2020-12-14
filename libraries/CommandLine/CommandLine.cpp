@@ -55,7 +55,7 @@ bool getCommandLineFromSerialPort(char * serialCommand){
 /*************************************************************************************************************
                                       Execute Commands
 *************************************************************************************************************/
-bool ExecuteCommand(char * exCommand) {
+void ExecuteCommand(char * exCommand) {
     char * ptrToCommandName = strtok(exCommand, delimiters);                    //Get an array of characters up to one of the delimiters specified in CommandLine.h. This is a command   
     
     /*REPLACE THESE WITH CASE STATEMENTS SO ITS NOT SO ANNOYING TO MAINTAIN*/
