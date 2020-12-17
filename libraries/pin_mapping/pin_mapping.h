@@ -22,5 +22,4 @@ const int Vpin              = 8;                  //BLDC Hall effect sensor V
 const int Wpin              = 9;                  //BLDC Hall effect sensor W
 const int neutralPin        = 10;            //Neutral/drive selection                  -- HIGH: DRIVE      LOW: NEUTRAL
 const int tachPin           = 11;               //Engine tachometer (hall effect sensor)   -- HIGH: Triggered  LOW: NOT TRIGGERED
-const int testInterrupt     = 15;
 #endif  //PIN_MAPPING_h

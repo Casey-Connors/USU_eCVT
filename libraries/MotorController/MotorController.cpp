@@ -19,7 +19,6 @@ float motorStartTime = 0;
 bool motorIsMoving = false;
 
 PID motorPID(&rpm, &motorOutput, &RPMSetpoint, kp, ki, kd, DIRECT);    //Set variables for PID system. See documentation for PID library
-Hall_Effect_RPM tach(tachPin);
 
 /*************************************************************************************************************
                                             Monitoring Functions
@@ -55,7 +54,7 @@ double CalculatePeakPowerRPM(double throttlePosition){
 
 void ComputeMotorOutput(void){
   RPMSetpoint = CalculatePeakPowerRPM(GetThrottlePosition());          //Calculate peak power RPM based on current throttle
-  tach.GetRPM();
+  rpm = GetRPM();
   motorPID.Compute();                                                  //PID compute to determine required motor output
 
   if(sheavePosition >= SHEAVE_LIMIT_MAX){                              //If the sheave is at its max limit                           
@@ -131,6 +130,7 @@ void InitializeController(void) {
   pinMode(Upin, INPUT_PULLUP);
   pinMode(Vpin, INPUT_PULLUP);
   pinMode(Wpin, INPUT_PULLUP);
+  
 
   motorPID.SetMode(AUTOMATIC);          //PID mode set to automatic. See documentation for PID library
   motorPID.SetOutputLimits(-MAX_SPEED, MAX_SPEED);   //Set output limits to be from - max speed to max speed. Later, if the pid outputs a negative value we interpret that as a different direction and change the motor accordingly

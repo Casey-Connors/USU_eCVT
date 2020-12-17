@@ -27,6 +27,7 @@ extern float motorRunTime;
 extern float motorStartTime;
 extern bool motorIsMoving;
 
+void outputRPM();
 
 int GetThrottlePosition(void);
 

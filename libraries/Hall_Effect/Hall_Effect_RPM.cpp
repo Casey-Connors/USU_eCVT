@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "Hall_Effect_RPM.h"
+#include <pin_mapping.h>
 
 //These can be defined in the class. Would have to do the extern and ISR wrapper trick like with the motor_hall_effect
 static volatile unsigned long LastTimeWeMeasured;                      // Stores the last time we measured a pulse so we can calculate the period.
@@ -8,6 +9,29 @@ static unsigned int AmountOfReadings;
 static unsigned int PulseCounter;                                  // Counts the amount of pulse readings we took so we can average multiple pulses before calculating the period.
 static unsigned long PeriodSum;                                        // Stores the summation of all the periods to do the average.
 static volatile unsigned long PeriodAverage;        // Stores the period between pulses in microseconds in total, if we are taking multiple pulses.
+unsigned long FrequencyRaw;                                     // Calculated frequency, based on the period. This has a lot of extra decimals without the decimal point.
+unsigned long FrequencyReal;                                    // Frequency without decimals.
+unsigned long RPM;                                              // Raw RPM without any processing.
+unsigned long LastTimeCycleMeasure;        // Stores the last time we measure a pulse in that cycle.
+																	// We need a variable with a value that is not going to be affected by the interrupt
+																	// because we are going to do math and functions that are going to mess up if the values
+																	// changes in the middle of the cycle.
+unsigned long CurrentMicros;                         // Stores the micros in that cycle.
+																	// We need a variable with a value that is not going to be affected by the interrupt
+																	// because we are going to do math and functions that are going to mess up if the values
+																	// changes in the middle of the cycle.
+
+unsigned int ZeroDebouncingExtra;  // Stores the extra value added to the ZeroTimeout to debounce it.
+									// The ZeroTimeout needs debouncing so when the value is close to the threshold it
+									// doesn't jump from 0 to the value. This extra value changes the threshold a little
+									// when we show a 0.
+
+
+unsigned long readIndex;  // The index of the current reading.
+unsigned long total;  // The running total.
+unsigned long average;  // The RPM value after applying the smoothing.
+
+unsigned long readings[10];  // The input.
 
 void RPM_Pulse_Event() {                                 
   PeriodBetweenPulses = micros() - LastTimeWeMeasured;    
@@ -29,9 +53,10 @@ void RPM_Pulse_Event() {
     PulseCounter++;
     PeriodSum = PeriodSum + PeriodBetweenPulses; 
   }
+  
 }
 
-Hall_Effect_RPM::Hall_Effect_RPM(int pin){
+void initializeRPM(){
 	PeriodBetweenPulses = ZeroTimeout+1000;
 	PeriodAverage = ZeroTimeout+1000;
 	PulseCounter = 1;
@@ -39,11 +64,11 @@ Hall_Effect_RPM::Hall_Effect_RPM(int pin){
 	CurrentMicros = micros();
 	AmountOfReadings = 1;
 
-  pinMode(pin, INPUT);
-	attachInterrupt(digitalPinToInterrupt(pin), RPM_Pulse_Event, RISING);
+  pinMode(tachPin, INPUT);
+	attachInterrupt(digitalPinToInterrupt(tachPin), RPM_Pulse_Event, FALLING);
 }
 
-unsigned long Hall_Effect_RPM::GetRPM(){
+unsigned long GetRPM(){
   LastTimeCycleMeasure = LastTimeWeMeasured;  // Last cycle time
   CurrentMicros = micros();                   // Current amount of time since the program started
 

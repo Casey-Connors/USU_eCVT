@@ -3,6 +3,7 @@
 #include <CommandLine.h>
 #include <Motor_Hall_Effect.h>
 #include <pin_mapping.h>
+#include <Hall_Effect_RPM.h>
 
 char CommandLine[COMMAND_BUFFER_LENGTH + 1];
 float lastTime = 0;
@@ -11,29 +12,29 @@ float lastSpeed = 0;
 float currentSpeed = 0;
 float timeDelta = 0;
 float lastPosTime = 0;
-float posUpdateInterval = 100;
+float posUpdateInterval = 10;
 
 
 void setup() {
   InitializeController();
   initialize_motor_hall_effect();
+  initializeRPM();
 }
 
 void loop() {
+  
   if(millis() - lastPosTime >= posUpdateInterval){
-    Serial.print("U: ");
+    /*Serial.print("U: ");
     Serial.print(digitalRead(Upin));
-    /*Serial.print(" || V: ");
+    Serial.print(" || V: ");
     Serial.print(digitalRead(Vpin));
     Serial.print(" || W: ");
-    Serial.println(digitalRead(Wpin));*/
-    Serial.print("   ");
-    Serial.print(pulseCount);
+    Serial.println(digitalRead(Wpin));
+    outputRPM();
     sheavePosition = getPosition();
     Serial.print("    Sheave position: ");
-    Serial.print(sheavePosition);
-    Serial.print("   ");
-    Serial.println(direct);
+    Serial.println(sheavePosition);*/
+    Serial.println(GetRPM());
     lastPosTime = millis();
   }
   
