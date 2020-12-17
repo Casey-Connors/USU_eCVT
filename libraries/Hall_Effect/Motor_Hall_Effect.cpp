@@ -3,12 +3,12 @@
 #include "MotorController.h"
 #include <pin_mapping.h>
 
-long pulseCount;	        // Integer variable to store the pulse count (dont need to worry about overflow since uLong can store UUUGGGEE nubmers)
+volatile long pulseCount = 0;	        // Integer variable to store the pulse count (dont need to worry about overflow since uLong can store UUUGGGEE nubmers)
  
-bool HSU_Val;		        // Current U sensor state
-bool HSV_Val;		        // Current V sensor state 
-bool HSW_Val;		        // Current W sensor state
-int direct;				    // Integer variable to store BLDC rotation direction
+bool HSU_Val = 0;		        // Current U sensor state
+bool HSV_Val = 0;		        // Current V sensor state 
+bool HSW_Val = 0;		        // Current W sensor state
+int direct = 1;				    // Integer variable to store BLDC rotation direction
 
 void initialize_motor_hall_effect() {
     pinMode(Upin, INPUT);
@@ -28,8 +28,8 @@ float getPosition(){
 void HallSensorU(){
     HSU_Val = digitalRead(Upin);
     HSW_Val = digitalRead(Wpin);					// Read the current W (or V) hall sensor value		
-    direct = (HSU_Val == HSW_Val) ? CW : CCW;
-    pulseCount = pulseCount + (1 * direct);
+    //direct = (HSU_Val == HSW_Val) ? CW : CCW;
+    pulseCount = pulseCount + (1);
 }
 
 void HallSensorV(){
