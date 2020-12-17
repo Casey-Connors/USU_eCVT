@@ -18,17 +18,17 @@ void HallSensorW_Dispatch(){
 }
 
 Motor_Hall_Effect::Motor_Hall_Effect(void (*UISR)() , void (*VISR)() , void (*WISR)()){
-    pinMode(Upin, INPUT);			
-    pinMode(Vpin, INPUT);			
+    pinMode(Upin, INPUT);
+    pinMode(Vpin, INPUT);
     pinMode(Wpin, INPUT);
 
-    attachInterrupt(digitalPinToInterrupt(Upin), HallSensorU_Dispatch, CHANGE);      
+    attachInterrupt(digitalPinToInterrupt(Upin), HallSensorU_Dispatch, CHANGE);
     attachInterrupt(digitalPinToInterrupt(Vpin), HallSensorV_Dispatch, CHANGE);
     attachInterrupt(digitalPinToInterrupt(Wpin), HallSensorW_Dispatch, CHANGE);
 }
 
 float Motor_Hall_Effect::getPosition(){
-    float position = pulseCount/PULSES_PER_MM;
+    float position = float(pulseCount)/PULSES_PER_MM;
     return position;
 }
 

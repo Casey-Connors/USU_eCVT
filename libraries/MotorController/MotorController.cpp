@@ -122,16 +122,15 @@ void Downshift(float distance, float rate){
                                             Initialization
 *************************************************************************************************************/
 void InitializeController(void) {
-  Serial.begin(9600);
+  Serial.begin(38400);
   pinMode(controlPin, OUTPUT);          //controlPin is an output pin
   pinMode(directionPin, OUTPUT);        //directionPin is an output pin
   pinMode(brakePin, OUTPUT);            //brakePin is an output pin
   pinMode(tachPin, INPUT);              //tachPin is an input pin
   pinMode(neutralPin, INPUT);
-  pinMode(Upin, INPUT);
-  pinMode(Vpin, INPUT);
-  pinMode(Wpin, INPUT);
-  sheavePosition = 0;
+  pinMode(Upin, INPUT_PULLUP);
+  pinMode(Vpin, INPUT_PULLUP);
+  pinMode(Wpin, INPUT_PULLUP);
 
   motorPID.SetMode(AUTOMATIC);          //PID mode set to automatic. See documentation for PID library
   motorPID.SetOutputLimits(-MAX_SPEED, MAX_SPEED);   //Set output limits to be from - max speed to max speed. Later, if the pid outputs a negative value we interpret that as a different direction and change the motor accordingly

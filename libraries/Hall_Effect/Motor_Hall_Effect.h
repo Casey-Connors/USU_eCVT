@@ -19,12 +19,13 @@ class Motor_Hall_Effect{
         void HallSensorU();
         void HallSensorV();
         void HallSensorW();
+        long pulseCount;	        // Integer variable to store the pulse count (dont need to worry about overflow since uLong can store UUUGGGEE nubmers)
     private:
         bool HSU_Val;		        // Current U sensor state
         bool HSV_Val;		        // Current V sensor state 
         bool HSW_Val;		        // Current W sensor state
         int direct;				    // Integer variable to store BLDC rotation direction
-        long pulseCount;	        // Integer variable to store the pulse count (dont need to worry about overflow since uLong can store UUUGGGEE nubmers)
+        
 };
 
 extern Motor_Hall_Effect motor;
