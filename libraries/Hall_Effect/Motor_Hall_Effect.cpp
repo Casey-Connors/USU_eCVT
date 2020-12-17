@@ -3,54 +3,43 @@
 #include "MotorController.h"
 #include <pin_mapping.h>
 
-//This whole dispatch thing is wierd but its the easiest way to be able to call the member function ISR's from attachInterrupt in the constructor
+long pulseCount;	        // Integer variable to store the pulse count (dont need to worry about overflow since uLong can store UUUGGGEE nubmers)
+ 
+bool HSU_Val;		        // Current U sensor state
+bool HSV_Val;		        // Current V sensor state 
+bool HSW_Val;		        // Current W sensor state
+int direct;				    // Integer variable to store BLDC rotation direction
 
-void HallSensorU_Dispatch(){
-    motor.HallSensorU();
-}
-
-void HallSensorV_Dispatch(){
-    motor.HallSensorV();
-}
-
-void HallSensorW_Dispatch(){
-    motor.HallSensorW();
-}
-
-Motor_Hall_Effect::Motor_Hall_Effect(void (*UISR)() , void (*VISR)() , void (*WISR)()){
+void initialize_motor_hall_effect() {
     pinMode(Upin, INPUT);
     pinMode(Vpin, INPUT);
     pinMode(Wpin, INPUT);
 
-    attachInterrupt(digitalPinToInterrupt(Upin), HallSensorU_Dispatch, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(Vpin), HallSensorV_Dispatch, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(Wpin), HallSensorW_Dispatch, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(Upin), HallSensorU, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(Vpin), HallSensorV, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(Wpin), HallSensorW, CHANGE);
 }
 
-float Motor_Hall_Effect::getPosition(){
+float getPosition(){
     float position = float(pulseCount)/PULSES_PER_MM;
     return position;
 }
 
-int Motor_Hall_Effect::getDirection(){
-    return direct;
-}
-
-void Motor_Hall_Effect::HallSensorU(){
+void HallSensorU(){
     HSU_Val = digitalRead(Upin);
     HSW_Val = digitalRead(Wpin);					// Read the current W (or V) hall sensor value		
     direct = (HSU_Val == HSW_Val) ? CW : CCW;
     pulseCount = pulseCount + (1 * direct);
 }
 
-void Motor_Hall_Effect::HallSensorV(){
+void HallSensorV(){
     HSV_Val = digitalRead(3);
     HSU_Val = digitalRead(2);					// Read the current U (or W) hall sensor value 
     direct = (HSV_Val == HSU_Val) ? CW : CCW;
     pulseCount = pulseCount + (1 * direct);
 }
 
-void Motor_Hall_Effect::HallSensorW(){
+void HallSensorW(){
   HSW_Val = digitalRead(4);					// Read the current W hall sensor value
   HSV_Val = digitalRead(3);						// Read the current V (or U) hall sensor value 
   direct = (HSW_Val == HSV_Val) ? CW : CCW;			// Determine rotation direction (ternary if statement)

@@ -13,10 +13,10 @@ float timeDelta = 0;
 float lastPosTime = 0;
 float posUpdateInterval = 1000;
 
-Motor_Hall_Effect motor = Motor_Hall_Effect(HallSensorU_Dispatch, HallSensorV_Dispatch, HallSensorW_Dispatch);
 
 void setup() {
   InitializeController();
+  initialize_motor_hall_effect();
 }
 
 void loop() {
@@ -28,8 +28,8 @@ void loop() {
     Serial.print(" || W: ");
     Serial.println(digitalRead(Wpin));
     Serial.print("   ");
-    Serial.print(motor.pulseCount);
-    sheavePosition = motor.getPosition();
+    Serial.print(pulseCount);
+    sheavePosition = getPosition();
     Serial.print("    Sheave position: ");
     Serial.println(sheavePosition);
     lastPosTime = millis();
